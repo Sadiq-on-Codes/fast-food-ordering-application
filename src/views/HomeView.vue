@@ -154,7 +154,7 @@ onMounted(() => {
 }
 
 .category-btn.active {
-  background: #d35400; /* Orange color */
+  background: #d35400;
   color: white;
 }
 
@@ -165,34 +165,42 @@ onMounted(() => {
   padding: 2rem;
 }
 
+/* Enhanced Menu Card Styles */
 .menu-card {
-  background: white;
-  border-radius: 12px;
+  background: #fff;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .menu-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
 }
 
 .menu-card-image {
   position: relative;
-  height: 200px;
+  height: 220px;
+  overflow: hidden;
 }
 
 .menu-card-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: scale-down;
+  transition: transform 0.3s ease;
+}
+
+.menu-card:hover .menu-card-image img {
+  transform: scale(1.05);
 }
 
 .unavailable-badge {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0, 0, 0, 0.7);
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 20px;
@@ -201,7 +209,12 @@ onMounted(() => {
 
 .menu-card-content {
   padding: 1.5rem;
-  color: #000;
+  color: #333;
+}
+
+.menu-card-content h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
 }
 
 .description {
@@ -220,21 +233,21 @@ onMounted(() => {
 .price {
   font-size: 1.25rem;
   font-weight: bold;
-  color: #d35400; /* Orange color */
+  color: #d35400;
 }
 
 .add-btn {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 20px;
-  background: #8e44ad; /* Purple color */
+  background: #8e44ad;
   color: white;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease;
 }
 
 .add-btn:hover:not(:disabled) {
-  background: #d35400; /* Orange color */
+  background: #d35400;
 }
 
 .add-btn:disabled {
@@ -251,7 +264,7 @@ onMounted(() => {
   width: 40px;
   height: 40px;
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #d35400; /* Orange color */
+  border-top: 4px solid #d35400;
   border-radius: 50%;
   margin: 0 auto 1rem;
   animation: spin 1s linear infinite;

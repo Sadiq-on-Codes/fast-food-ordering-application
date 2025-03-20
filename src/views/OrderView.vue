@@ -23,7 +23,7 @@
               :class="{ removing: removingIndex === index }"
             >
               <div class="item-info">
-                <img :src="item.image_url || '/default-dish.jpg'" :alt="item.name" />
+                <img :src="item.image_url || '/order.jpg'" :alt="item.name" />
                 <div class="item-details">
                   <h3>{{ item.name }}</h3>
                   <p class="item-description">{{ item.description }}</p>

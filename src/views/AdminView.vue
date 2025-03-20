@@ -25,8 +25,8 @@
       <div v-if="activeTab === 'menu'" class="admin-section">
         <div class="section-header">
           <h2>Menu Items</h2>
-          <button @click="showAddForm = !showAddForm" class="primary-button">
-            {{ showAddForm ? 'Cancel' : 'Add New Item' }}
+          <button v-show="!showAddForm" @click="showAddForm = !showAddForm" class="primary-button">
+            {{ showAddForm ? '' : 'Add New Item' }}
           </button>
         </div>
 
@@ -76,12 +76,12 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="itemImage">Image URL</label>
+                  <label for="itemImage">Image Upload</label>
                   <input 
                     id="itemImage"
-                    v-model="newItem.image_url" 
-                    type="url"
-                    placeholder="https://example.com/image.jpg"
+                    type="file" 
+                    accept="image/*"
+                    @change="handleFileUpload"
                   >
                 </div>
 
@@ -135,7 +135,7 @@
               <img :src="item.image_url || defaultImage" :alt="item.name">
               <span :class="['category-badge', item.category]">{{ item.category }}</span>
               <span :class="['availability-badge', item.active ? 'active' : 'inactive']">
-                {{ item.active ? ' ' : 'Unavailable' }}
+                {{ item.active ? 'Available ' : 'Unavailable' }}
               </span>
             </div>
             <div class="menu-item-content">
@@ -228,6 +228,7 @@ import { useMenuStore } from '../stores/menu'
 import { useOrdersStore } from '../stores/orders'
 import { storeToRefs } from 'pinia'
 import defaultImage from '../assets/order.jpg'
+import { supabase } from '../lib/supabase' // make sure to set up your Supabase client
 
 const menuStore = useMenuStore()
 const ordersStore = useOrdersStore()
@@ -246,6 +247,39 @@ const newItem = ref({
   image_url: '',
   active: true  // Changed from available to active
 })
+
+const uploadedImageUrl = ref('')
+
+const handleFileUpload = async (event) => {
+  const file = event.target.files[0]
+  if (!file) return
+
+  // Create a unique file name
+  const fileName = `${Date.now()}_${file.name}`
+  
+  // Upload the file to the "menu-images" bucket
+  let { data, error } = await supabase.storage
+    .from('menu-images')
+    .upload(fileName, file)
+
+  if (error) {
+    console.error("File upload error:", error)
+    return
+  }
+
+  // Retrieve the public URL for the uploaded file
+  const { publicURL, error: urlError } = supabase.storage
+    .from('menu-images')
+    .getPublicUrl(data.path)
+  
+  if (urlError) {
+    console.error("Error getting public URL:", urlError)
+    return
+  }
+
+  uploadedImageUrl.value = publicURL
+  newItem.value.image_url = publicURL
+}
 
 const filteredOrders = computed(() => {
   if (orderStatus.value === 'all') return orders.value
@@ -381,7 +415,7 @@ const updateOrderStatus = async (orderId, status) => {
 .menu-item-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: scale-down;
 }
 
 .category-badge {
@@ -572,7 +606,6 @@ const updateOrderStatus = async (orderId, status) => {
   cursor: pointer;
   font-weight: 500;
   transition: background 0.3s ease;
-  margin-bottom: 0.5rem;
 }
 
 .primary-button:hover {
