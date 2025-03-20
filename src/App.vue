@@ -79,10 +79,16 @@ import { RouterLink, RouterView } from 'vue-router'
   --header-height: 80px;
 }
 
+/* * {
+  outline: 1px solid;
+} */
+
 .app-container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  width: 90vw;
+  justify-content: center;
 }
 
 .header {
