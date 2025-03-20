@@ -53,17 +53,18 @@ const loginHandler = async () => {
 .login-container {
   max-width: 400px;
   width: 100%;
-  padding: 2rem;
+  padding: 1.5rem;
   background: #fff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
   text-align: center;
 }
 
 h1 {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   color: #333;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
+  font-weight: bold;
 }
 
 .form-group {
@@ -73,16 +74,16 @@ h1 {
 
 label {
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
   color: #333;
   font-weight: bold;
 }
 
 input {
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.5rem;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 5px;
   font-size: 1rem;
   transition: border-color 0.3s ease;
 }
@@ -94,13 +95,14 @@ input:focus {
 
 button {
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.5rem;
   background: #d35400;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
   font-size: 1rem;
+  font-weight: bold;
   transition: background 0.3s ease;
 }
 
@@ -110,6 +112,6 @@ button:hover {
 
 .error-message {
   color: red;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 </style>
