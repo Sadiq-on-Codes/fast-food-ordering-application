@@ -7,7 +7,7 @@
           Menu
         </router-link>
         <router-link to="/order" class="nav-link" active-class="active">
-          Order
+          Orders <span v-if="orderCount > 0" class="order-count">{{ orderCount }}</span>
         </router-link>
         <router-link v-if="isUserAuthenticated" to="/admin" class="nav-link admin-link" active-class="active">
           Admin
@@ -21,11 +21,18 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { RouterLink } from 'vue-router'
+import { ref, onMounted, watchEffect, computed } from 'vue'
 import { isAuthenticated as checkAuth } from '../services/auth'
+import { useOrdersStore } from '../stores/orders'
+import { storeToRefs } from 'pinia'
 
 const isUserAuthenticated = ref(false)
+const orderStore = useOrdersStore()
+const { currentOrder } = storeToRefs(orderStore)
+
+const orderCount = computed(() => {
+  return currentOrder.value.reduce((sum, item) => sum + (item.quantity || 1), 0)
+})
 
 onMounted(async () => {
   isUserAuthenticated.value = await checkAuth()
@@ -81,6 +88,20 @@ onMounted(async () => {
 .admin-link {
   background-color: #8e44ad;
   color: white;
+}
+
+.order-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  color: #d35400;
+  border-radius: 50%;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
 }
 
 @media (max-width: 768px) {
