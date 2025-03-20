@@ -1,23 +1,19 @@
 <template>
   <header class="header">
     <div class="header-content">
-      <div class="header-left">
-        <h1 class="brand">Pork Chops</h1>
-        <p class="tagline">Delicious pork dishes made with love</p>
-      </div>
-      
+      <h1 class="brand">Pork Chops</h1>
       <nav class="nav">
         <router-link to="/" class="nav-link" active-class="active">
-          <i class="fas fa-utensils"></i>
           Menu
         </router-link>
         <router-link to="/order" class="nav-link" active-class="active">
-          <i class="fas fa-shopping-cart"></i>
           Order
         </router-link>
-        <router-link to="/admin" class="nav-link admin-link" active-class="active">
-          <i class="fas fa-cog"></i>
+        <router-link v-if="isUserAuthenticated" to="/admin" class="nav-link admin-link" active-class="active">
           Admin
+        </router-link>
+        <router-link v-else to="/login" class="nav-link" active-class="active">
+          Login
         </router-link>
       </nav>
     </div>
@@ -25,7 +21,15 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
+import { isAuthenticated as checkAuth } from '../services/auth'
+
+const isUserAuthenticated = ref(false)
+
+onMounted(async () => {
+  isUserAuthenticated.value = await checkAuth()
+})
 </script>
 
 <style scoped>
@@ -47,22 +51,11 @@ import { RouterLink } from 'vue-router'
   align-items: center;
 }
 
-.header-left {
-  display: flex;
-  flex-direction: column;
-}
-
 .brand {
   color: #d35400;
   font-size: 2rem;
   margin: 0;
   font-weight: bold;
-}
-
-.tagline {
-  color: #666;
-  margin: 0.25rem 0 0 0;
-  font-size: 0.9rem;
 }
 
 .nav {
@@ -75,22 +68,14 @@ import { RouterLink } from 'vue-router'
   text-decoration: none;
   color: #2c3e50;
   font-weight: 500;
-  padding: 0.75rem 1.5rem;
-  border-radius: 25px;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
   transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.nav-link i {
-  font-size: 1.1rem;
 }
 
 .nav-link:hover, .nav-link.active {
   background-color: #d35400;
   color: white;
-  transform: translateY(-2px);
 }
 
 .admin-link {

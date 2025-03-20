@@ -3,7 +3,7 @@
     <div class="footer-content">
       <div class="footer-section">
         <h3>Contact Us</h3>
-        <p>📞 (555) 123-4567</p>
+        <p>📞 0501230274</p>
         <p>📧 info@porkchops.com</p>
       </div>
       <div class="footer-section">
@@ -27,7 +27,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2025 Pork Chops. All rights reserved.</p>
+      <p>&copy; 2025 VeriPas Inc. All rights reserved.</p>
+      <p>Designed and Developed by <a href="https://www.linkedin.com/in/abubakar-sadick-y-57a858b0/" target="_blank" class="developer-link">Abubakar Sadick Yahaya</a></p>
     </div>
   </footer>
 </template>
@@ -39,7 +40,7 @@
 .footer {
   background-color: #2c3e50;
   color: #ecf0f1;
-  padding: 3rem 1rem 1rem;
+  padding: 2rem 1rem;
   margin-top: auto;
 }
 
@@ -47,15 +48,16 @@
   width: 80%;
   max-width: 1400px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   gap: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .footer-section h3 {
   color: #8e44ad;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .social-links {
@@ -81,7 +83,7 @@
 
 @media (max-width: 768px) {
   .footer-content {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     text-align: center;
   }
 
