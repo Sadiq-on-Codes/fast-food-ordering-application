@@ -2,7 +2,7 @@
   <div class="menu-view">
     <div class="hero-section">
       <h1>Our Delicious Menu</h1>
-      <p class="subtitle">Made with love, served with pride</p>
+      <p class="subtitle">We offer a variety of tasty options for lunch and dinner, carefully crafted to satisfy any craving. 🍲 🥗 🍗</p>
     </div>
 
     <div class="categories-nav">
@@ -87,7 +87,7 @@ const filteredItems = computed(() => {
 })
 
 const handleImageError = (e) => {
-  e.target.src = '/default-dish.jpg'
+  e.target.src = '/order.jpg'
 }
 
 const addToOrder = (item) => {
@@ -145,7 +145,7 @@ onMounted(() => {
 }
 
 .category-btn.active {
-  background: var(--primary-color);
+  background: #d35400; /* Orange color */
   color: white;
 }
 
@@ -192,6 +192,7 @@ onMounted(() => {
 
 .menu-card-content {
   padding: 1.5rem;
+  color: #000;
 }
 
 .description {
@@ -210,21 +211,21 @@ onMounted(() => {
 .price {
   font-size: 1.25rem;
   font-weight: bold;
-  color: var(--primary-color);
+  color: #d35400; /* Orange color */
 }
 
 .add-btn {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 20px;
-  background: var(--secondary-color);
+  background: #8e44ad; /* Purple color */
   color: white;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .add-btn:hover:not(:disabled) {
-  background: var(--primary-color);
+  background: #d35400; /* Orange color */
 }
 
 .add-btn:disabled {
@@ -241,7 +242,7 @@ onMounted(() => {
   width: 40px;
   height: 40px;
   border: 4px solid #f3f3f3;
-  border-top: 4px solid var(--primary-color);
+  border-top: 4px solid #d35400; /* Orange color */
   border-radius: 50%;
   margin: 0 auto 1rem;
   animation: spin 1s linear infinite;
