@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 
 export const useOrdersStore = defineStore('orders', () => {
   const currentOrder = ref([])
+  const orders = ref([])
   const loading = ref(false)
 
   // Load initial state from session storage
@@ -76,13 +77,47 @@ export const useOrdersStore = defineStore('orders', () => {
     }
   }
 
+  const fetchOrders = async () => {
+    loading.value = true
+    try {
+      const { data, error } = await supabase
+        .from('orders')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+      orders.value = data
+    } catch (error) {
+      console.error('Error fetching orders:', error)
+    } finally {
+      loading.value = false
+    }
+  }
+
+  const updateOrderStatus = async (orderId, status) => {
+    try {
+      const { error } = await supabase
+        .from('orders')
+        .update({ status })
+        .eq('id', orderId)
+
+      if (error) throw error
+      await fetchOrders()
+    } catch (error) {
+      console.error('Error updating order status:', error)
+    }
+  }
+
   return {
     currentOrder,
+    orders,
     loading,
     addToOrder,
     removeFromOrder,
     updateQuantity,
     clearOrder,
-    submitOrder
+    submitOrder,
+    fetchOrders,
+    updateOrderStatus
   }
 })

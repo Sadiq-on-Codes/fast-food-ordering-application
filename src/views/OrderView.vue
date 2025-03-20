@@ -128,10 +128,11 @@ const { currentOrder, loading } = storeToRefs(orderStore)
 
 const customerName = ref('')
 const customerEmail = ref('')
-const customerLocation = ref('') // Add this line
+const customerLocation = ref('')
 const orderNotes = ref('')
 const removingIndex = ref(null)
 const orderMessage = ref(null)
+const isSubmitting = ref(false)
 
 const updateItemQuantity = (index, newQuantity) => {
   orderStore.updateQuantity(index, newQuantity)
@@ -149,13 +150,16 @@ const removeItem = async (index) => {
 }
 
 const submitOrder = async () => {
-  orderMessage.value = null
+  if (isSubmitting.value) return
   
   try {
+    isSubmitting.value = true
+    orderMessage.value = null
+
     const orderDetails = {
       customer_name: customerName.value,
       customer_email: customerEmail.value,
-      customer_location: customerLocation.value, // Add this line
+      customer_location: customerLocation.value,
       notes: orderNotes.value,
       total_amount: orderTotal.value * 1.1,
       subtotal: orderTotal.value,
@@ -167,22 +171,23 @@ const submitOrder = async () => {
     
     orderMessage.value = {
       type: 'success',
-      text: 'Order placed successfully! Redirecting to confirmation page...'
+      text: 'Order placed successfully! Redirecting to home page...'
     }
 
-    // Wait for 2 seconds to show the success message before redirecting
-    setTimeout(() => {
-      router.push({
-        name: 'order-confirmation',
-        params: { orderId: result.id }
-      })
-    }, 2000)
+    // Wait for 2 seconds then redirect
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    
+    // Clear the order and redirect
+    orderStore.clearOrder()
+    router.push('/')
   } catch (error) {
     orderMessage.value = {
       type: 'error',
       text: 'Failed to place order. Please try again.'
     }
     console.error('Failed to submit order:', error)
+  } finally {
+    isSubmitting.value = false
   }
 }
 </script>
@@ -466,6 +471,22 @@ const submitOrder = async () => {
   background-color: #f8d7da;
   color: #721c24;
   border: 1px solid #f5c6cb;
+}
+
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 768px) {

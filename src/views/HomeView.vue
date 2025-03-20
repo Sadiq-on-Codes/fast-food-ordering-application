@@ -29,10 +29,10 @@
 
       <div v-else class="menu-grid">
         <div 
-          v-for="item in filteredItems" 
+          v-for="item in activeMenuItems" 
           :key="item.id" 
           class="menu-card"
-          :class="{ 'unavailable': !item.available }"
+          :class="{ 'unavailable': !item.active }"
         >
           <div class="menu-card-image">
             <img 
@@ -40,7 +40,7 @@
               :alt="item.name"
               @error="handleImageError"
             >
-            <div v-if="!item.available" class="unavailable-badge">
+            <div v-if="!item.active" class="unavailable-badge">
               Currently Unavailable
             </div>
           </div>
@@ -52,7 +52,7 @@
               <span class="price">${{ item.price.toFixed(2) }}</span>
               <button 
                 @click="addToOrder(item)"
-                :disabled="!item.available"
+                :disabled="!item.active"
                 class="add-btn"
               >
                 Add to Order
@@ -84,6 +84,15 @@ const categories = computed(() => {
 const filteredItems = computed(() => {
   if (selectedCategory.value === 'All') return items.value
   return items.value.filter(item => item.category === selectedCategory.value)
+})
+
+const activeMenuItems = computed(() => {
+  if (selectedCategory.value === 'All') {
+    return items.value.filter(item => item.active)
+  }
+  return items.value.filter(item => 
+    item.active && item.category === selectedCategory.value
+  )
 })
 
 const handleImageError = (e) => {

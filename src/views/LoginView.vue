@@ -1,18 +1,33 @@
 <template>
-  <div class="login-view">
-    <div class="login-container">
-      <h1>Login</h1>
-      <form @submit.prevent="loginHandler">
+  <div class="login-container">
+    <div class="login-card">
+      <h2 class="login-title">Welcome Back</h2>
+      <form @submit.prevent="handleLogin" class="login-form">
         <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" v-model="email" required />
+          <label for="email">Email Address</label>
+          <input 
+            id="email" 
+            type="email" 
+            v-model="email" 
+            placeholder="your.email@example.com" 
+            required
+          />
         </div>
         <div class="form-group">
           <label for="password">Password</label>
-          <input type="password" id="password" v-model="password" required />
+          <input 
+            id="password" 
+            type="password" 
+            v-model="password" 
+            placeholder="Enter your password" 
+            required
+          />
         </div>
-        <button type="submit">Login</button>
-        <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+        <button type="submit" :disabled="loading" class="primary-button">
+          <span v-if="loading" class="spinner small"></span>
+          <span v-else>Login</span>
+        </button>
+        <p v-if="errorMsg" class="error">{{ errorMsg }}</p>
       </form>
     </div>
   </div>
@@ -20,98 +35,143 @@
 
 <script setup>
 import { ref } from 'vue'
+import { supabase } from '../lib/supabase'
 import { useRouter } from 'vue-router'
-import { login } from '../services/auth'
 
 const email = ref('')
 const password = ref('')
-const errorMessage = ref('')
+const loading = ref(false)
+const errorMsg = ref('')
 const router = useRouter()
 
-const loginHandler = async () => {
-  try {
-    errorMessage.value = ''
-    await login(email.value, password.value)
-    router.push({ name: 'admin' })
-  } catch (error) {
-    errorMessage.value = 'Invalid credentials'
-    console.error('Login failed:', error.message)
+const handleLogin = async () => {
+  loading.value = true
+  errorMsg.value = ''
+  
+  // Optionally sign out any existing session
+  await supabase.auth.signOut()
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email: email.value,
+    password: password.value
+  })
+
+  if (error) {
+    errorMsg.value = error.message
+  } else {
+    router.push('/admin')
   }
+  loading.value = false
 }
 </script>
 
 <style scoped>
-.login-view {
+/* Container centering background */
+.login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: #f5f5f5;
-  padding: 1rem;
+  background-image: linear-gradient(135deg, #f4f4f9 0%, #e0e5ec 100%);
 }
 
-.login-container {
-  max-width: 400px;
+/* Card for login form */
+.login-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 15px 25px rgba(0,0,0,0.1);
+  padding: 2rem 3rem;
   width: 100%;
-  padding: 1.5rem;
-  background: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  text-align: center;
+  max-width: 400px;
+  animation: fadeIn 0.5s ease-out;
 }
 
-h1 {
-  margin-bottom: 1rem;
-  color: #333;
+/* Title styling */
+.login-title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
   font-size: 1.75rem;
   font-weight: bold;
 }
 
-.form-group {
-  margin-bottom: 1rem;
-  text-align: left;
+/* Form groups styling */
+.login-form .form-group {
+  margin-bottom: 1.25rem;
 }
 
-label {
+.login-form .form-group label {
   display: block;
-  margin-bottom: 0.25rem;
-  color: #333;
-  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+  font-weight: 500;
 }
 
-input {
+.login-form .form-group input {
   width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  padding: 0.75rem;
+  border: 1px solid #ccd1d9;
+  border-radius: 8px;
   font-size: 1rem;
-  transition: border-color 0.3s ease;
+  transition: border 0.3s ease;
 }
 
-input:focus {
-  border-color: #d35400;
+.login-form .form-group input:focus {
   outline: none;
+  border-color: #d35400;
+  box-shadow: 0 0 0 3px rgba(211,84,0,0.1);
 }
 
-button {
+/* Primary button styling */
+.primary-button {
   width: 100%;
-  padding: 0.5rem;
-  background: #d35400;
-  color: #fff;
+  padding: 0.75rem;
+  background-color: #d35400;
+  color: white;
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  border-radius: 8px;
   font-size: 1rem;
-  font-weight: bold;
-  transition: background 0.3s ease;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
-button:hover {
-  background: #e67e22;
+.primary-button:hover:not(:disabled) {
+  background-color: #e67e22;
+  transform: translateY(-2px);
 }
 
-.error-message {
-  color: red;
-  margin-top: 0.5rem;
+.primary-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Error message styling */
+.error {
+  color: #dc3545;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* Spinner styles */
+.spinner.small {
+  width: 16px;
+  height: 16px;
+  border-width: 2px;
+  border-radius: 50%;
+  border: 2px solid white;
+  border-top-color: transparent;
+  animation: spin 0.8s linear infinite;
+  margin-right: 4px;
+}
+
+/* Animations */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 </style>
