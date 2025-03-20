@@ -34,7 +34,7 @@
                 </div>
               </div>
               <div class="item-actions">
-                <span class="item-price">${{ ((item.price * (item.quantity || 1))).toFixed(2) }}</span>
+                <span class="item-price">₵{{ ((item.price * (item.quantity || 1))).toFixed(2) }}</span>
                 <button @click="removeItem(index)" class="remove-button">
                   <span class="remove-icon">×</span>
                 </button>
@@ -45,11 +45,11 @@
           <div class="order-summary-card">
             <div class="summary-row">
               <span>Subtotal</span>
-              <span>${{ orderTotal.toFixed(2) }}</span>
+              <span>₵{{ orderTotal.toFixed(2) }}</span>
             </div>
             <div class="summary-row total">
               <span>Total</span>
-              <span>${{ orderTotal.toFixed(2) }}</span>
+              <span>₵{{ orderTotal.toFixed(2) }}</span>
             </div>
           </div>
 
@@ -105,7 +105,7 @@
                 <router-link to="/" class="back-button">Add More Items</router-link>
                 <button type="submit" class="submit-button" :disabled="loading">
                   <span v-if="loading" class="spinner small"></span>
-                  <span v-else>Place Order • ${{ (orderTotal * 1.1).toFixed(2) }}</span>
+                  <span v-else>Place Order • ₵{{ (orderTotal * 1.1).toFixed(2) }}</span>
                 </button>
               </div>
             </form>
@@ -203,7 +203,7 @@ const submitOrder = async () => {
               url('/order-bg.jpg') center/cover;
   color: white;
   text-align: center;
-  padding: 3rem 2rem;
+  padding-top: 1rem;
 }
 
 .order-header h1 {

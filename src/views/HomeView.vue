@@ -49,7 +49,7 @@
             <h3>{{ item.name }}</h3>
             <p class="description">{{ item.description }}</p>
             <div class="price-row">
-              <span class="price">${{ item.price.toFixed(2) }}</span>
+              <span class="price">₵{{ item.price.toFixed(2) }}</span>
               <button 
                 @click="addToOrder(item)"
                 :disabled="!item.active"
