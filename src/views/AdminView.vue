@@ -48,7 +48,7 @@
                 </div>
                 
                 <div class="form-group">
-                  <label for="itemPrice">Price ($)</label>
+                  <label for="itemPrice">Price (₵)</label>
                   <input 
                     id="itemPrice"
                     v-model="newItem.price" 
@@ -121,7 +121,7 @@
                   <h3>{{ newItem.name || 'Item Name' }}</h3>
                   <p class="preview-description">{{ newItem.description || 'Item description will appear here' }}</p>
                   <div class="preview-footer">
-                    <span class="preview-price">${{ newItem.price ? Number(newItem.price).toFixed(2) : '0.00' }}</span>
+                    <span class="preview-price">₵{{ newItem.price ? Number(newItem.price).toFixed(2) : '0.00' }}</span>
                   </div>
                 </div>
               </div>
@@ -142,7 +142,7 @@
               <h3>{{ item.name }}</h3>
               <p class="description">{{ item.description }}</p>
               <div class="menu-item-footer">
-                <span class="price">${{ item.price.toFixed(2) }}</span>
+                <span class="price">₵{{ item.price.toFixed(2) }}</span>
                 <div class="item-actions">
                   <button 
                     @click.prevent="toggleItemAvailability(item)"
@@ -153,7 +153,7 @@
                     <span v-else>{{ item.active ? 'Set Unavailable' : 'Set Available' }}</span>
                   </button>
                   <button @click="deleteItem(item.id)" class="delete-btn">
-                    <span class="material-icons">delete</span>
+                    <span class="material-icons">Delete</span>
                   </button>
                 </div>
               </div>
@@ -504,6 +504,7 @@ const updateOrderStatus = async (orderId, status) => {
 .orders-list {
   display: grid;
   gap: 1.5rem;
+  
 }
 
 .order-card {

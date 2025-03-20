@@ -16,25 +16,38 @@
 
         <template v-else>
           <div class="order-items">
-            <div v-for="(item, index) in currentOrder" 
-                :key="index" 
-                class="order-item"
-                :class="{ 'removing': removingIndex === index }"
+            <div
+              v-for="(item, index) in currentOrder"
+              :key="index"
+              class="order-item"
+              :class="{ removing: removingIndex === index }"
             >
               <div class="item-info">
-                <img :src="item.image_url || '/default-dish.jpg'" :alt="item.name">
+                <img :src="item.image_url || '/default-dish.jpg'" :alt="item.name" />
                 <div class="item-details">
                   <h3>{{ item.name }}</h3>
                   <p class="item-description">{{ item.description }}</p>
                   <div class="quantity-controls">
-                    <button @click="updateItemQuantity(index, (item.quantity || 1) - 1)" class="quantity-btn">-</button>
+                    <button
+                      @click="updateItemQuantity(index, (item.quantity || 1) - 1)"
+                      class="quantity-btn"
+                    >
+                      -
+                    </button>
                     <span class="quantity">{{ item.quantity || 1 }}</span>
-                    <button @click="updateItemQuantity(index, (item.quantity || 1) + 1)" class="quantity-btn">+</button>
+                    <button
+                      @click="updateItemQuantity(index, (item.quantity || 1) + 1)"
+                      class="quantity-btn"
+                    >
+                      +
+                    </button>
                   </div>
                 </div>
               </div>
               <div class="item-actions">
-                <span class="item-price">₵{{ ((item.price * (item.quantity || 1))).toFixed(2) }}</span>
+                <span class="item-price">
+                  ₵{{ (item.price * (item.quantity || 1)).toFixed(2) }}
+                </span>
                 <button @click="removeItem(index)" class="remove-button">
                   <span class="remove-icon">×</span>
                 </button>
@@ -58,54 +71,39 @@
             <form @submit.prevent="submitOrder" class="form-grid">
               <div class="form-group">
                 <label for="customerName">Name</label>
-                <input 
-                  id="customerName"
-                  v-model="customerName" 
-                  type="text" 
-                  required
-                >
+                <input id="customerName" v-model="customerName" type="text" required />
               </div>
-              
               <div class="form-group">
                 <label for="customerEmail">Email</label>
-                <input 
-                  id="customerEmail"
-                  v-model="customerEmail" 
-                  type="email"
-                  required
-                >
+                <input id="customerEmail" v-model="customerEmail" type="email" required />
               </div>
-
               <div class="form-group full-width">
                 <label for="customerLocation">Delivery Location</label>
-                <input 
+                <input
                   id="customerLocation"
-                  v-model="customerLocation" 
+                  v-model="customerLocation"
                   type="text"
                   placeholder="Enter your delivery address"
                   required
-                >
+                />
               </div>
-              
               <div class="form-group full-width">
                 <label for="customerNotes">Special Instructions</label>
-                <textarea 
+                <textarea
                   id="customerNotes"
-                  v-model="orderNotes" 
+                  v-model="orderNotes"
                   rows="3"
                   placeholder="Any special requests or allergies?"
                 ></textarea>
               </div>
-
               <div v-if="orderMessage" :class="['order-message', orderMessage.type]">
                 {{ orderMessage.text }}
               </div>
-
               <div class="form-actions">
                 <router-link to="/" class="back-button">Add More Items</router-link>
                 <button type="submit" class="submit-button" :disabled="loading">
                   <span v-if="loading" class="spinner small"></span>
-                  <span v-else>Place Order • ₵{{ (orderTotal * 1.1).toFixed(2) }}</span>
+                  <span v-else>Place Order • ₵{{ (orderTotal).toFixed(2) }}</span>
                 </button>
               </div>
             </form>
@@ -139,19 +137,22 @@ const updateItemQuantity = (index, newQuantity) => {
 }
 
 const orderTotal = computed(() => {
-  return currentOrder.value.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0)
+  return currentOrder.value.reduce(
+    (sum, item) => sum + item.price * (item.quantity || 1),
+    0
+  )
 })
 
 const removeItem = async (index) => {
   removingIndex.value = index
-  await new Promise(resolve => setTimeout(resolve, 300))
+  await new Promise((resolve) => setTimeout(resolve, 300))
   orderStore.removeFromOrder(index)
   removingIndex.value = null
 }
 
 const submitOrder = async () => {
   if (isSubmitting.value) return
-  
+
   try {
     isSubmitting.value = true
     orderMessage.value = null
@@ -164,26 +165,26 @@ const submitOrder = async () => {
       total_amount: orderTotal.value * 1.1,
       subtotal: orderTotal.value,
       tax: orderTotal.value * 0.1,
-      items: currentOrder.value
+      items: currentOrder.value,
     }
 
     const result = await orderStore.submitOrder(orderDetails)
-    
+
     orderMessage.value = {
       type: 'success',
-      text: 'Order placed successfully! Redirecting to home page...'
+      text: 'Order placed successfully! Redirecting to home page...',
     }
 
     // Wait for 2 seconds then redirect
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+
     // Clear the order and redirect
     orderStore.clearOrder()
     router.push('/')
   } catch (error) {
     orderMessage.value = {
       type: 'error',
-      text: 'Failed to place order. Please try again.'
+      text: 'Failed to place order. Please try again.',
     }
     console.error('Failed to submit order:', error)
   } finally {
@@ -200,7 +201,7 @@ const submitOrder = async () => {
 
 .order-header {
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-              url('/order-bg.jpg') center/cover;
+    url('/order-bg.jpg') center/cover;
   color: white;
   text-align: center;
   padding-top: 1rem;
@@ -220,7 +221,7 @@ const submitOrder = async () => {
 .order-summary {
   background: white;
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 2rem;
 }
 
@@ -493,17 +494,14 @@ const submitOrder = async () => {
   .form-grid {
     grid-template-columns: 1fr;
   }
-  
   .item-info img {
     width: 60px;
     height: 60px;
   }
-  
   .form-actions {
     flex-direction: column;
     gap: 1rem;
   }
-  
   .back-button,
   .submit-button {
     width: 100%;
