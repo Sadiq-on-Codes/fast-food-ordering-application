@@ -173,6 +173,7 @@
               <option value="completed">Completed</option>
               <option value="cancelled">Cancelled</option>
             </select>
+            <input type="date" v-model="orderDate" placeholder="Filter by Date">
           </div>
         </div>
 
@@ -239,6 +240,7 @@ const { orders } = storeToRefs(ordersStore)
 const activeTab = ref('menu')
 const showAddForm = ref(false)
 const orderStatus = ref('all')
+const orderDate = ref('')  // New date filter
 
 const newItem = ref({
   name: '',
@@ -286,8 +288,18 @@ const handleFileUpload = async (event) => {
 }
 
 const filteredOrders = computed(() => {
-  if (orderStatus.value === 'all') return orders.value
-  return orders.value.filter(order => order.status === orderStatus.value)
+  let filtered = orders.value
+  if (orderStatus.value !== 'all') {
+    filtered = filtered.filter(order => order.status === orderStatus.value)
+  }
+  if (orderDate.value) {
+    const selectedDate = new Date(orderDate.value)
+    filtered = filtered.filter(order => {
+      const orderDateObj = new Date(order.created_at)
+      return orderDateObj.toLocaleDateString() === selectedDate.toLocaleDateString()
+    })
+  }
+  return filtered
 })
 
 onMounted(async () => {
@@ -854,6 +866,26 @@ const updateOrderStatus = async (orderId, status) => {
 .availability-btn:hover {
   opacity: 0.9;
   transform: translateY(-1px);
+}
+
+.order-filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.order-filters select,
+.order-filters input[type="date"] {
+  padding: 0.5rem 1rem;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+.order-filters select:focus,
+.order-filters input[type="date"]:focus {
+  outline: none;
+  border-color: #d35400;
+  box-shadow: 0 0 0 3px rgba(211,84,0,0.1);
 }
 
 @media (max-width: 1024px) {
