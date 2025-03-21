@@ -191,6 +191,7 @@
             <div class="order-items">
               <div v-for="(item, index) in order.items" :key="index" class="order-item">
                 <span>{{ item.name }} x {{ item.quantity }}</span>
+               <span>{{ order.notes }}</span>
                 <span>${{ (item.price * item.quantity).toFixed(2) }}</span>
               </div>
             </div>
@@ -254,6 +255,9 @@ const handleFileUpload = async (event) => {
   const file = event.target.files[0]
   if (!file) return
 
+  // Set a local preview first
+  newItem.value.image_url = URL.createObjectURL(file)
+
   // Create a unique file name
   const fileName = `${Date.now()}_${file.name}`
   
@@ -277,7 +281,7 @@ const handleFileUpload = async (event) => {
     return
   }
 
-  uploadedImageUrl.value = publicURL
+  // Update the image_url with the public URL once the upload is finished
   newItem.value.image_url = publicURL
 }
 

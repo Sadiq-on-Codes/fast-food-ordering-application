@@ -146,11 +146,12 @@ onMounted(() => {
 .category-btn {
   padding: 0.5rem 1.5rem;
   border: none;
-  border-radius: 20px;
+  border-radius: 5px;
   background: transparent;
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
+  text-transform: capitalize;
 }
 
 .category-btn.active {
