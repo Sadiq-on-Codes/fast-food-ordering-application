@@ -111,6 +111,8 @@
         </template>
       </div>
     </div>
+
+    <OrderSuccessModal v-if="showSuccessModal" @close="handleModalClose" />
   </div>
 </template>
 
@@ -119,6 +121,7 @@ import { ref, computed } from 'vue'
 import { useOrdersStore } from '../stores/orders'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
+import OrderSuccessModal from '../components/OrderSuccessModal.vue'
 
 const router = useRouter()
 const orderStore = useOrdersStore()
@@ -131,6 +134,7 @@ const orderNotes = ref('')
 const removingIndex = ref(null)
 const orderMessage = ref(null)
 const isSubmitting = ref(false)
+const showSuccessModal = ref(false)
 
 const updateItemQuantity = (index, newQuantity) => {
   orderStore.updateQuantity(index, newQuantity)
@@ -172,15 +176,14 @@ const submitOrder = async () => {
 
     orderMessage.value = {
       type: 'success',
-      text: 'Order placed successfully! Redirecting to home page...',
+      text: 'Order placed successfully!',
     }
 
-    // Wait for 2 seconds then redirect
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    // Show success modal
+    showSuccessModal.value = true
 
-    // Clear the order and redirect
+    // Clear the order after showing the modal
     orderStore.clearOrder()
-    router.push('/')
   } catch (error) {
     orderMessage.value = {
       type: 'error',
@@ -190,6 +193,11 @@ const submitOrder = async () => {
   } finally {
     isSubmitting.value = false
   }
+}
+
+const handleModalClose = () => {
+  showSuccessModal.value = false
+  router.push('/')
 }
 </script>
 
