@@ -317,7 +317,7 @@ const submitOrder = async () => {
   background: #f8f9fa;
   color: #000;
   padding: 1.5rem;
-  border-radius: 8px;
+  border-radius: 5px;
   margin: 2rem 0;
 }
 
@@ -393,7 +393,7 @@ const submitOrder = async () => {
   color: #2c3e50;
   text-decoration: none;
   border: 1px solid #dee2e6;
-  border-radius: 25px;
+  border-radius: 5px;
   transition: all 0.2s;
 }
 
@@ -406,7 +406,7 @@ const submitOrder = async () => {
   background: #8e44ad;
   color: white;
   border: none;
-  border-radius: 25px;
+  border-radius: 5px;
   cursor: pointer;
   transition: all 0.2s;
 }

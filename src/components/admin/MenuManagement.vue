@@ -118,7 +118,7 @@ const handleItemAdded = () => {
 .availability-badge {
   position: absolute;
   padding: 0.5rem 1rem;
-  border-radius: 20px;
+  border-radius: 5px;
   font-size: 0.875rem;
 }
 
@@ -178,7 +178,7 @@ const handleItemAdded = () => {
 .delete-btn {
   padding: 0.5rem 1rem;
   border: none;
-  border-radius: 6px;
+  border-radius: 5px;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -203,7 +203,7 @@ const handleItemAdded = () => {
   background: #d35400;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 5px;
   cursor: pointer;
   transition: all 0.2s;
 }
