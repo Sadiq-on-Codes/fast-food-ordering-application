@@ -211,4 +211,15 @@ const handleItemAdded = () => {
 .primary-button:hover {
   background: #9a3412;
 }
+
+@media (max-width: 768px) {
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .menu-grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>

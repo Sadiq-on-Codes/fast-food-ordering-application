@@ -122,7 +122,6 @@ const orderCount = computed(() => {
   color: white;
 }
 
-/* Style the logout button to match the nav links */
 .logout-button {
   cursor: pointer;
   background: none;

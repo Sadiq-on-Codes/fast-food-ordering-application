@@ -95,4 +95,23 @@ onMounted(async () => {
   background: #d35400;
   color: white;
 }
+
+@media (max-width: 768px) {
+  .admin-header {
+    padding: 2rem 1rem;
+  }
+
+  .admin-header h1 {
+    font-size: 2rem;
+  }
+
+  .tabs {
+    flex-direction: column;
+  }
+
+  .tabs button {
+    width: 100%;
+    text-align: center;
+  }
+}
 </style>
