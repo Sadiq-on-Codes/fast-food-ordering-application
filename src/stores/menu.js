@@ -24,19 +24,22 @@ export const useMenuStore = defineStore('menu', () => {
   }
 
   const addMenuItem = async (item) => {
-    try {
-      const { data, error } = await supabase
-        .from('menu_items')
-        .insert([{ ...item, active: true }])
-        .select()
+    const { data, error } = await supabase
+      .from('menu_items')
+      .insert([
+        {
+          name: item.name,
+          description: item.description,
+          price: item.price,
+          category: item.category,
+          image_url: item.image_url, // store directly without modifications
+          active: item.active
+        }
+      ])
+      .select()
 
-      if (error) throw error
-      items.value.push(data[0])
-      return data[0]
-    } catch (error) {
-      console.error('Error adding menu item:', error)
-      throw error
-    }
+    if (error) throw error
+    return data
   }
 
   const toggleItemAvailability = async (item) => {

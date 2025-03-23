@@ -2,7 +2,7 @@
   <header class="header">
     <div class="header-content">
       <div class="brand-container">
-        <img src="/logo.jpg" alt="Pork Chops Logo" class="logo" />
+        <img src="/logo.png" alt="Pork Chops Logo" class="logo" />
         <h1 class="brand">Pork Chops</h1>
       </div>
       <nav class="nav">
