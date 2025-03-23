@@ -120,15 +120,12 @@ const handleFileUpload = async (event) => {
   const file = event.target.files[0]
   if (!file) return
 
-  // Create and set preview immediately
   previewImage.value = URL.createObjectURL(file)
   uploadInProgress.value = true
 
   try {
-    // Create a unique filename
     const fileName = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`
     
-    // Upload to Supabase storage
     const { data, error } = await supabase.storage
       .from('menu-images')
       .upload(fileName, file, {
@@ -138,19 +135,14 @@ const handleFileUpload = async (event) => {
 
     if (error) throw error
 
-    // Get the public URL
     const { data: urlData } = supabase.storage
       .from('menu-images')
       .getPublicUrl(fileName)
 
     if (!urlData?.publicUrl) throw new Error('Failed to get public URL')
 
-    // Store the permanent URL
     newItem.value.image_url = urlData.publicUrl
     console.log('Image uploaded successfully:', urlData.publicUrl)
-
-    // Clean up the blob URL after successful upload
-    URL.revokeObjectURL(previewImage.value)
   } catch (error) {
     console.error('Upload error:', error)
     newItem.value.image_url = ''
@@ -170,13 +162,15 @@ const handleSubmit = async () => {
   try {
     const itemToAdd = {
       ...newItem.value,
-      price: parseFloat(newItem.value.price),
-      image_url: newItem.value.image_url // Ensure image_url is included
+      price: parseFloat(newItem.value.price)
     }
+    console.log('Submitting item:', itemToAdd)
     
-    await menuStore.addMenuItem(itemToAdd)
+    const addedItem = await menuStore.addMenuItem(itemToAdd)
     
-    // Clean up the blob URL
+    // Update local state with the newly added item
+    menuStore.items.push(addedItem)
+    
     if (previewImage.value) {
       URL.revokeObjectURL(previewImage.value)
       previewImage.value = ''

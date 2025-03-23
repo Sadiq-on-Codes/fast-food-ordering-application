@@ -31,6 +31,7 @@ import Footer from './components/Footer.vue'
   display: flex;
   flex-direction: column;
   width: 99vw;
+  margin: 0 auto;
   justify-content: center;
 }
 

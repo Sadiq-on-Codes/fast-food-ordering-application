@@ -32,14 +32,14 @@ export const useMenuStore = defineStore('menu', () => {
           description: item.description,
           price: item.price,
           category: item.category,
-          image_url: item.image_url, // store directly without modifications
+          image_url: item.image_url,
           active: item.active
         }
       ])
       .select()
 
     if (error) throw error
-    return data
+    return data[0] // Return the newly added item
   }
 
   const toggleItemAvailability = async (item) => {
