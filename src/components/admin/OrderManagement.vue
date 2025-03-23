@@ -37,7 +37,7 @@
           </div>
           
           <div class="order-summary">
-            <p><strong>Total:</strong> ₵{{ order.total_amount.toFixed(2) }}</p>
+            <p><strong>Total:</strong> ₵{{ order.subtotal.toFixed(2) }}</p>
             <p v-if="order.notes"><strong>Notes:</strong> {{ order.notes }}</p>
           </div>
         </div>
@@ -133,7 +133,7 @@ const updateOrderStatus = async (orderId, status) => {
 
 .status-badge {
   padding: 0.5rem 1rem;
-  border-radius: 20px;
+  border-radius: 5px;
   font-size: 0.875rem;
   font-weight: 500;
 }
