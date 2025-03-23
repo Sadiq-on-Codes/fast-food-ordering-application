@@ -201,7 +201,7 @@ const submitOrder = async () => {
 
 .order-header {
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-    url('/order-bg.jpg') center/cover;
+    url('/hero.jpg') center/cover;
   color: white;
   text-align: center;
   padding-top: 1rem;

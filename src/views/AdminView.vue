@@ -53,7 +53,7 @@ onMounted(async () => {
 
 .admin-header {
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-              url('/order-bg.jpg') center/cover;
+              url('/admin_hero.jpg') center/cover;
   color: white;
   text-align: center;
   padding: 3rem 2rem;
