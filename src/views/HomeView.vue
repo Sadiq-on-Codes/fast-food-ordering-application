@@ -116,7 +116,7 @@ onMounted(() => {
 
 .hero-section {
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-              url('/hero.jpg') center/cover;
+              url('/hero4.jpg') center/cover;
   color: white;
   text-align: center;
   padding: 4rem 2rem;
