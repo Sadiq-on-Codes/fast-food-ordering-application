@@ -4,11 +4,11 @@
       <div class="footer-section">
         <h3>Contact Us</h3>
         <p>📞 0501230274</p>
-        <p>📧 info@porkchops.com</p>
+        <p>📧 smoothietwist19@gmail.com</p>
       </div>
       <div class="footer-section">
         <h3>Hours</h3>
-        <p>Mon-Fri: 11am - 10pm</p>
+        <p>Mon-Fri: 10am - 10pm</p>
         <p>Sat-Sun: 12pm - 11pm</p>
       </div>
       <div class="footer-section">
