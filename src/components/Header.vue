@@ -1,7 +1,10 @@
 <template>
   <header class="header">
     <div class="header-content">
-      <h1 class="brand">Pork Chops</h1>
+      <div class="brand-container">
+        <img src="/logo.jpg" alt="Pork Chops Logo" class="logo" />
+        <h1 class="brand">Pork Chops</h1>
+      </div>
       <nav class="nav">
         <router-link to="/" class="nav-link" active-class="active">
           Menu
@@ -9,7 +12,7 @@
         <router-link to="/order" class="nav-link" active-class="active">
           Orders <span v-if="orderCount > 0" class="order-count">{{ orderCount }}</span>
         </router-link>
-        <router-link v-if="isUserAuthenticated" to="/admin" class="nav-link admin-link" active-class="active">
+        <router-link v-if="isUserAuthenticated" to="/admin" class="nav-link" active-class="active">
           Admin
         </router-link>
         <button 
@@ -150,6 +153,18 @@ const orderCount = computed(() => {
   margin-left: 0.5rem;
 }
 
+.brand-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
 @media (max-width: 768px) {
   .header-content {
     flex-direction: column;
@@ -166,6 +181,14 @@ const orderCount = computed(() => {
   .nav-link {
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
+  }
+
+  .brand-container {
+    gap: 0.5rem;
+  }
+
+  .logo {
+    height: 30px;
   }
 }
 </style>

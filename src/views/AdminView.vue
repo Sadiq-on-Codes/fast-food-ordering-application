@@ -101,8 +101,14 @@
                 <button type="button" @click="showAddForm = false" class="cancel-button">
                   Cancel
                 </button>
-                <button type="submit" :disabled="loading" class="primary-button">
-                  <span v-if="loading" class="spinner"></span>
+                <button 
+                  type="submit" 
+                  :disabled="loading || uploadInProgress"
+                  class="primary-button"
+                >
+                  <span v-if="uploadInProgress" class="spinner small"></span>
+                  <span v-if="uploadInProgress">Uploading...</span>
+                  <span v-else-if="loading" class="spinner"></span>
                   <span v-else>Add Menu Item</span>
                 </button>
               </div>
@@ -112,10 +118,10 @@
               <h4>Preview</h4>
               <div class="preview-card">
                 <div class="preview-image">
-                  <img :src="newItem.image_url || '../assets/order.jpg'" :alt="newItem.name || 'Preview'">
-                  <span v-if="newItem.category" :class="['category-badge', newItem.category]">
-                    {{ newItem.category }}
-                  </span>
+                  <img 
+                    :src="newItem.image_url || previewImage || defaultImage" 
+                    :alt="newItem.name || 'Preview'" 
+                  />
                 </div>
                 <div class="preview-content">
                   <h3>{{ newItem.name || 'Item Name' }}</h3>
@@ -251,40 +257,40 @@ const newItem = ref({
   active: true  // Changed from available to active
 })
 
-const uploadedImageUrl = ref('')
+// Separate ref for immediate preview
+const previewImage = ref('')
+// Track file upload status
+const uploadInProgress = ref(false)
 
 const handleFileUpload = async (event) => {
   const file = event.target.files[0]
   if (!file) return
 
-  // Set a local preview first
-  newItem.value.image_url = URL.createObjectURL(file)
+  uploadInProgress.value = true
+  previewImage.value = URL.createObjectURL(file)
 
-  // Create a unique file name
-  const fileName = `${Date.now()}_${file.name}`
-  
-  // Upload the file to the "menu-images" bucket
-  let { data, error } = await supabase.storage
-    .from('menu-images')
-    .upload(fileName, file)
+  try {
+    const fileName = `${Date.now()}_${file.name}`
+    
+    let { data, error } = await supabase.storage
+      .from('menu-images')
+      .upload(fileName, file)
 
-  if (error) {
-    console.error("File upload error:", error)
-    return
+    if (error) throw error
+
+    // Get the public URL using the correct method
+    const { data: publicUrlData } = supabase.storage
+      .from('menu-images')
+      .getPublicUrl(fileName)
+
+    // The URL is in publicUrlData.publicUrl
+    newItem.value.image_url = publicUrlData.publicUrl
+    console.log('Upload successful, URL:', publicUrlData.publicUrl)
+  } catch (error) {
+    console.error('Upload error:', error)
+  } finally {
+    uploadInProgress.value = false
   }
-
-  // Retrieve the public URL for the uploaded file
-  const { publicURL, error: urlError } = supabase.storage
-    .from('menu-images')
-    .getPublicUrl(data.path)
-  
-  if (urlError) {
-    console.error("Error getting public URL:", urlError)
-    return
-  }
-
-  // Update the image_url with the public URL once the upload is finished
-  newItem.value.image_url = publicURL
 }
 
 const filteredOrders = computed(() => {

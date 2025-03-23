@@ -30,7 +30,7 @@ import Footer from './components/Footer.vue'
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  width: 100vw;
+  width: 99vw;
   justify-content: center;
 }
 
