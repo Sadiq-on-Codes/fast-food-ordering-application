@@ -14,23 +14,11 @@ export default async (request, context) => {
   try {
     const { customer_name, total_amount } = await request.json();
 
-    const accountSid = context.env.VITE_TWILIO_ACCOUNT_SID;
-    const authToken = context.env.VITE_TWILIO_AUTH_TOKEN;
-    const fromNumber = context.env.VITE_TWILIO_WHATSAPP_NUMBER;
-    const toNumber = context.env.VITE_TWILIO_RECIPIENT_NUMBER;
-
-    if (!accountSid || !authToken || !fromNumber || !toNumber) {
-      return new Response(
-        JSON.stringify({ error: "Missing Twilio configuration" }), 
-        { 
-          status: 500,
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*"
-          }
-        }
-      );
-    }
+    // Get environment variables
+    const accountSid = Deno.env.get("VITE_TWILIO_ACCOUNT_SID");
+    const authToken = Deno.env.get("VITE_TWILIO_AUTH_TOKEN");
+    const fromNumber = Deno.env.get("VITE_TWILIO_WHATSAPP_NUMBER");
+    const toNumber = Deno.env.get("VITE_WHATSAPP_RECIPIENT_NUMBER");
 
     const url = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`;
     const bodyParams = new URLSearchParams();
@@ -48,39 +36,22 @@ export default async (request, context) => {
     });
 
     if (!twilioResponse.ok) {
-      const errText = await twilioResponse.text();
-      return new Response(
-        JSON.stringify({ error: errText }), 
-        { 
-          status: 500,
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*"
-          }
-        }
-      );
+      throw new Error(await twilioResponse.text());
     }
 
-    return new Response(
-      JSON.stringify({ success: true }), 
-      { 
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*"
-        }
+    return new Response(JSON.stringify({ success: true }), {
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
       }
-    );
+    });
   } catch (error) {
-    return new Response(
-      JSON.stringify({ error: error.message }), 
-      { 
-        status: 500,
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*"
-        }
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
       }
-    );
+    });
   }
 };
