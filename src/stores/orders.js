@@ -44,10 +44,10 @@ export const useOrdersStore = defineStore('orders', () => {
 
   const sendWhatsAppNotification = async (orderDetails) => {
     try {
-      // Use correct port for local development
+      // Use correct paths for both development and production
       const functionPath = import.meta.env.DEV 
         ? 'http://localhost:8888/.netlify/functions/sendWhatsAppMessage'
-        : '/api/sendWhatsAppMessage';
+        : '/.netlify/functions/sendWhatsAppMessage';  // Changed from '/api/sendWhatsAppMessage'
 
       const response = await fetch(functionPath, {
         method: 'POST',
