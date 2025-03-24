@@ -17,13 +17,18 @@ coverage
 /cypress/videos/
 /cypress/screenshots/
 
+# Environment variables
+.env
+.env.*
+!.env.example
+.dev.vars
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
 *.suo
 *.ntvs*
-*.env
 *.njsproj
 *.sln
 *.sw?
