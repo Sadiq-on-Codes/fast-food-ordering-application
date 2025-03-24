@@ -74,8 +74,8 @@
                 <input id="customerName" v-model="customerName" type="text" required />
               </div>
               <div class="form-group">
-                <label for="customerEmail">Email</label>
-                <input id="customerEmail" v-model="customerEmail" type="email" required />
+                <label for="customerPhone">Phone Number</label>
+                <input id="customerPhone" v-model="customerPhone" type="tel" required />
               </div>
               <div class="form-group full-width">
                 <label for="customerLocation">Delivery Location</label>
@@ -128,7 +128,7 @@ const orderStore = useOrdersStore()
 const { currentOrder, loading } = storeToRefs(orderStore)
 
 const customerName = ref('')
-const customerEmail = ref('')
+const customerPhone = ref('')
 const customerLocation = ref('')
 const orderNotes = ref('')
 const removingIndex = ref(null)
@@ -163,7 +163,7 @@ const submitOrder = async () => {
 
     const orderDetails = {
       customer_name: customerName.value,
-      customer_email: customerEmail.value,
+      customer_phone: customerPhone.value,
       customer_location: customerLocation.value,
       notes: orderNotes.value,
       total_amount: orderTotal.value * 1.1,

@@ -49,7 +49,7 @@ export const useOrdersStore = defineStore('orders', () => {
         .from('orders')
         .insert([{
           customer_name: orderDetails.customer_name,
-          customer_email: orderDetails.customer_email,
+          customer_phone: orderDetails.customer_phone,
           customer_location: orderDetails.customer_location,
           notes: orderDetails.notes,
           total_amount: orderDetails.total_amount,

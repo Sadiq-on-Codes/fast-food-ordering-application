@@ -23,7 +23,7 @@
         <div class="order-details">
           <div class="customer-info">
             <p><strong>Customer:</strong> {{ order.customer_name }}</p>
-            <p><strong>Email:</strong> {{ order.customer_email }}</p>
+            <p><strong>Phone Number:</strong> {{ order.customer_phone }}</p>
             <p><strong>Location:</strong> {{ order.customer_location }}</p>
           </div>
           
