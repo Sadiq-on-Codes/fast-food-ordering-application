@@ -14,11 +14,32 @@ export default async (request, context) => {
   try {
     const { customer_name, total_amount } = await request.json();
 
-    // Get environment variables
+    // Access environment variables directly from Deno.env
     const accountSid = Deno.env.get("VITE_TWILIO_ACCOUNT_SID");
     const authToken = Deno.env.get("VITE_TWILIO_AUTH_TOKEN");
     const fromNumber = Deno.env.get("VITE_TWILIO_WHATSAPP_NUMBER");
     const toNumber = Deno.env.get("VITE_WHATSAPP_RECIPIENT_NUMBER");
+
+    // Debug log to check if env vars are available
+    console.log("Environment variables:", {
+      hasAccountSid: !!accountSid,
+      hasAuthToken: !!authToken,
+      hasFromNumber: !!fromNumber,
+      hasToNumber: !!toNumber
+    });
+
+    if (!accountSid || !authToken || !fromNumber || !toNumber) {
+      return new Response(
+        JSON.stringify({ error: "Missing Twilio configuration" }), 
+        {
+          status: 500,
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+          }
+        }
+      );
+    }
 
     const url = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`;
     const bodyParams = new URLSearchParams();
@@ -39,19 +60,26 @@ export default async (request, context) => {
       throw new Error(await twilioResponse.text());
     }
 
-    return new Response(JSON.stringify({ success: true }), {
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*"
+    return new Response(
+      JSON.stringify({ success: true }), 
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*"
+        }
       }
-    });
+    );
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*"
+    console.error("Error in Edge Function:", error);
+    return new Response(
+      JSON.stringify({ error: error.message }), 
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*"
+        }
       }
-    });
+    );
   }
 };
