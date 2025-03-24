@@ -44,18 +44,20 @@ export const useOrdersStore = defineStore('orders', () => {
 
   const sendWhatsAppNotification = async (orderDetails) => {
     try {
-      const response = await fetch('https://xtncpiyddbbujfrkaptk.supabase.co/functions/v1/sendWhatsAppMessage', {
+      // Use correct port for local development
+      const functionPath = import.meta.env.DEV 
+        ? 'http://localhost:8888/.netlify/functions/sendWhatsAppMessage'
+        : '/api/sendWhatsAppMessage';
+
+      const response = await fetch(functionPath, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${supabase.auth.session()?.access_token}`,
         },
         body: JSON.stringify({
           customer_name: orderDetails.customer_name,
           total_amount: orderDetails.total_amount
-        }),
-        credentials: 'include', // Include credentials if needed
-        mode: 'cors', // Explicitly set CORS mode
+        })
       });
 
       if (!response.ok) {
@@ -66,7 +68,6 @@ export const useOrdersStore = defineStore('orders', () => {
       return data;
     } catch (error) {
       console.error("Failed to send WhatsApp message:", error);
-      // Don't throw the error so it doesn't block the order submission
       return null;
     }
   }
